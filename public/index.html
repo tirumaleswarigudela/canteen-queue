@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Canteen Queue Management</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>🍴 Canteen Queue</h1>
+
+        <p>Join the queue without standing in line.</p>
+
+        <div class="card">
+
+            <h2>Join Queue</h2>
+
+            <input
+                type="text"
+                id="name"
+                placeholder="Enter your name"
+            >
+
+            <input
+                type="text"
+                id="food"
+                placeholder="Enter food item"
+            >
+
+            <button onclick="joinQueue()">
+                🎟️ Get Queue Number
+            </button>
+
+            <div id="result"></div>
+
+        </div>
+
+        <div class="card">
+
+            <h2>📋 Current Queue</h2>
+
+            <button onclick="loadQueue()">
+                Refresh Queue
+            </button>
+
+            <div id="queueList"></div>
+
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Canteen Admin Panel</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>🍴 Canteen Admin</h1>
+
+        <p>Manage the current canteen queue</p>
+
+        <div class="card">
+
+            <h2>📋 Waiting Queue</h2>
+
+            <button onclick="loadAdminQueue()">
+                🔄 Refresh Queue
+            </button>
+
+            <div id="adminQueue"></div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        // Load waiting queue
+        async function loadAdminQueue() {
+
+            const response = await fetch("/api/queue");
+
+            const queue = await response.json();
+
+            const list = document.getElementById("adminQueue");
+
+            list.innerHTML = "";
+
+            if (queue.length === 0) {
+
+                list.innerHTML = "<p>🎉 No students waiting.</p>";
+
+                return;
+            }
+
+            queue.forEach(person => {
+
+                const div = document.createElement("div");
+
+                div.className = "queue-item";
+
+                div.innerHTML = `
+                    <strong>🎟️ Queue ${person.id}</strong>
+                    <br>
+                    👤 ${person.name}
+                    <br>
+                    🍴 ${person.food}
+                    <br>
+                    <button onclick="serveQueue(${person.id})">
+                        ✅ Serve
+                    </button>
+                `;
+
+                list.appendChild(div);
+
+            });
+
+        }
+
+
+        // Mark queue as served
+        async function serveQueue(id) {
+
+            const response = await fetch(
+                `/api/queue/${id}/serve`,
+                {
+                    method: "PUT"
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+
+                alert(data.message || "Could not serve queue");
+
+                return;
+            }
+
+            alert("✅ Queue " + id + " has been served!");
+
+            loadAdminQueue();
+
+        }
+
+
+        // Load queue when page opens
+        loadAdminQueue();
+
+    </script>
+
+</body>
+
+</html>
