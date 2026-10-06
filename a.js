@@ -5,21 +5,16 @@ const { createClient } = require("@supabase/supabase-js");
 const path = require("path");
 
 const app = express();
-const PORT = 3000;
 
-// Connect to Supabase
+const PORT = process.env.PORT || 3000;
+
 const supabase = createClient(
     process.env.SUPABASE_URL,
     process.env.SUPABASE_KEY
 );
 
-// Middleware
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
-
-// ===============================
-// STUDENT: JOIN QUEUE
-// ===============================
 
 app.post("/api/queue", async (req, res) => {
 
@@ -44,7 +39,6 @@ app.post("/api/queue", async (req, res) => {
         .single();
 
     if (error) {
-
         console.error(error);
 
         return res.status(500).json({
@@ -59,11 +53,6 @@ app.post("/api/queue", async (req, res) => {
     });
 });
 
-
-// ===============================
-// GET CURRENT QUEUE
-// ===============================
-
 app.get("/api/queue", async (req, res) => {
 
     const { data, error } = await supabase
@@ -73,7 +62,6 @@ app.get("/api/queue", async (req, res) => {
         .order("id", { ascending: true });
 
     if (error) {
-
         console.error(error);
 
         return res.status(500).json({
@@ -84,11 +72,6 @@ app.get("/api/queue", async (req, res) => {
 
     res.json(data);
 });
-
-
-// ===============================
-// ADMIN: MARK QUEUE AS SERVED
-// ===============================
 
 app.put("/api/queue/:id/serve", async (req, res) => {
 
@@ -104,7 +87,6 @@ app.put("/api/queue/:id/serve", async (req, res) => {
         .single();
 
     if (error) {
-
         console.error(error);
 
         return res.status(500).json({
@@ -119,11 +101,6 @@ app.put("/api/queue/:id/serve", async (req, res) => {
     });
 });
 
-
-// ===============================
-// HOME PAGE
-// ===============================
-
 app.get("/", (req, res) => {
 
     res.sendFile(
@@ -132,15 +109,10 @@ app.get("/", (req, res) => {
 
 });
 
-
-// ===============================
-// START SERVER
-// ===============================
-
 app.listen(PORT, () => {
 
     console.log(
-        `Canteen Queue running at http://localhost:${PORT}`
+        `Canteen Queue running on port ${PORT}`
     );
 
 });
